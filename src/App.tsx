@@ -213,43 +213,8 @@ export default function App() {
               </span>
             </div>
 
-            {/* Right side: quick shortcuts (desktop) & Collapse / Expand Button */}
+            {/* Right side: Collapse / Expand Button */}
             <div className="flex items-center gap-1">
-              {!isCollapsed && (
-                <div className="hidden sm:flex items-center gap-1 mr-1">
-                  <button
-                    onClick={() => {
-                      setTimeHours(6.0);
-                      setIsPlaying(false);
-                    }}
-                    className="p-1.5 md:p-2 rounded-lg bg-white/5 hover:bg-amber-500/20 text-neutral-300 hover:text-amber-300 transition-colors cursor-pointer"
-                    title="Amanecer (06:00)"
-                  >
-                    <Sunrise className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => {
-                      setTimeHours(12.0);
-                      setIsPlaying(false);
-                    }}
-                    className="p-1.5 md:p-2 rounded-lg bg-white/5 hover:bg-yellow-500/20 text-neutral-300 hover:text-yellow-300 transition-colors cursor-pointer"
-                    title="Mediodía (12:00)"
-                  >
-                    <Sun className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => {
-                      setTimeHours(18.0);
-                      setIsPlaying(false);
-                    }}
-                    className="p-1.5 md:p-2 rounded-lg bg-white/5 hover:bg-orange-500/20 text-neutral-300 hover:text-orange-300 transition-colors cursor-pointer"
-                    title="Atardecer (18:00)"
-                  >
-                    <Sunset className="w-4 h-4" />
-                  </button>
-                </div>
-              )}
-
               {/* Botón para colapsar / expandir el panel */}
               <button
                 onClick={() => setIsCollapsed(!isCollapsed)}
