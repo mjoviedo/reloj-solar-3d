@@ -1,0 +1,6 @@
+{
+  "name": "Reloj Solar Casero 3D",
+  "description": "Simulador 3D interactivo y minimalista de un reloj solar casero con varilla de madera, base de plastilina y papel afiche.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
