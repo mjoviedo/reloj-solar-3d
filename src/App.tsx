@@ -327,32 +327,7 @@ export default function App() {
               <p className="pl-2 text-neutral-200">
                Te proponemos un desafío para llevar al aula: descubrir cómo, a partir de un recurso sencillo como una varilla o un palo, se puede construir un reloj solar. La clave está en aprovechar la posición del Sol en el cielo.               
               </p>
-              <p className="pl-2 text-neutral-200">
-               Necesitamos:
-              </p>
-
-              <div className="space-y-1.5 pt-1">
-                <div className="flex items-start gap-2">
-                  <span className="text-neutral-500">·</span>
-                  <span><strong>Una varilla de madera o plástico:</strong> de 40 o 50 cm de longitud. (gnómon vertical).</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-neutral-500">·</span>
-                  <span><strong>Plastilina:</strong> como base para fijar la varilla.</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-neutral-500">·</span>
-                  <span><strong>Papel afiche:</strong> con los puntos cardinales marcados con fibrón.</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-neutral-500">·</span>
-                  <span><strong>Cinta adhesiva:</strong> para fijar el papel a una superficie fija.</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-neutral-500">·</span>
-                  <span><strong>Brújula o celular:</strong> para ubicar los puntos cardinales.</span>
-                </div>
-              </div>
+              
               <a
                 href="https://innovafuturo.cba.gov.ar/el-lado-b-de-una-varilla/"
                 target="_blank"
