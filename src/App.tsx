@@ -324,10 +324,13 @@ export default function App() {
                   <span><strong>Brújula o celular:</strong> para ubicar los puntos cardinales.</span>
                 </div>
               </div>
-              <a href="https://innovafuturo.cba.gov.ar/el-lado-b-de-una-varilla/" target="_blank">
-              <button class="bg-amber-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                Más información 
-              </button>
+              <a
+                href="https://innovafuturo.cba.gov.ar/el-lado-b-de-una-varilla/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block text-center bg-amber-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-colors cursor-pointer"
+              >
+                Más información
               </a>
 
               <div className="pt-2 border-t border-white/10 text-[11px] text-neutral-400 space-y-1">
