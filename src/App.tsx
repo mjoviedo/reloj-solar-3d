@@ -17,6 +17,8 @@ import {
   X,
   Eye,
   ZoomIn,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { SundialScene } from './components/SundialScene';
 
@@ -29,6 +31,7 @@ export default function App() {
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const [showShadowGuide, setShowShadowGuide] = useState<boolean>(false);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
   // Animation frame loop for continuous timelapse playback
   const lastTimeRef = useRef<number>(performance.now());
@@ -163,15 +166,19 @@ export default function App() {
       </div>
 
       {/* Floating Bottom Minimalist Control Deck */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 w-[92%] max-w-xl">
-        <div className="bg-neutral-900/75 hover:bg-neutral-900/85 backdrop-blur-xl border border-white/15 rounded-2xl p-4 shadow-2xl transition-all flex flex-col gap-3">
-          {/* Top Row: Playback, Current Time Display, Preset shortcuts */}
-          <div className="flex items-center justify-between gap-3">
+      <div className={`absolute bottom-3 md:bottom-6 left-1/2 -translate-x-1/2 z-20 transition-all duration-300 ${
+        isCollapsed ? 'w-auto max-w-[280px] sm:max-w-xs' : 'w-[94%] max-w-xl'
+      }`}>
+        <div className={`bg-neutral-900/80 hover:bg-neutral-900/90 backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl transition-all duration-300 flex flex-col ${
+          isCollapsed ? 'p-1.5 sm:p-2 gap-0' : 'p-3 md:p-4 gap-2.5 md:gap-3'
+        }`}>
+          {/* Top Row: Playback, Current Time Display, Shortcuts, Collapse Toggle */}
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2 md:gap-3">
             {/* Play / Pause Button */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 md:gap-2">
               <button
                 onClick={() => setIsPlaying(!isPlaying)}
-                className={`p-2.5 rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center ${
+                className={`p-2 md:p-2.5 rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center cursor-pointer ${
                   isPlaying
                     ? 'bg-amber-500 text-neutral-950 hover:bg-amber-400 font-semibold'
                     : 'bg-white/10 text-white hover:bg-white/20'
@@ -182,95 +189,117 @@ export default function App() {
                 {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
               </button>
 
-              {/* Speed selector (only visible or active during play) */}
-              <button
-                onClick={() => setPlaybackSpeed((s) => (s === 1 ? 2 : s === 2 ? 4 : 1))}
-                className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-mono text-neutral-300 transition-colors"
-                title="Velocidad de reproducción"
-              >
-                {playbackSpeed}x
-              </button>
+              {/* Speed selector (visible when expanded) */}
+              {!isCollapsed && (
+                <button
+                  onClick={() => setPlaybackSpeed((s) => (s === 1 ? 2 : s === 2 ? 4 : 1))}
+                  className="px-2 md:px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-mono text-neutral-300 transition-colors cursor-pointer"
+                  title="Velocidad de reproducción"
+                >
+                  {playbackSpeed}x
+                </button>
+              )}
             </div>
 
-            {/* Time Readout Badge */}
-            <div className="flex items-center gap-2.5 px-3.5 py-1.5 bg-black/40 border border-white/10 rounded-xl">
+            {/* Time Readout Badge (Clickable to toggle collapse/expand) */}
+            <div
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 bg-black/40 hover:bg-black/60 border border-white/10 rounded-xl cursor-pointer transition-colors select-none"
+              title={isCollapsed ? 'Expandir panel de control' : 'Colapsar panel'}
+            >
               {getSunIcon()}
-              <span className="font-mono text-xl md:text-2xl font-bold tracking-wider text-white">
+              <span className="font-mono text-base sm:text-xl md:text-2xl font-bold tracking-wider text-white">
                 {formatTime(timeHours)}
               </span>
             </div>
 
-            {/* Quick Time Shortcuts: Sunrise, Noon, Sunset */}
-            <div className="flex items-center gap-1.5">
+            {/* Right side: quick shortcuts (desktop) & Collapse / Expand Button */}
+            <div className="flex items-center gap-1">
+              {!isCollapsed && (
+                <div className="hidden sm:flex items-center gap-1 mr-1">
+                  <button
+                    onClick={() => {
+                      setTimeHours(6.0);
+                      setIsPlaying(false);
+                    }}
+                    className="p-1.5 md:p-2 rounded-lg bg-white/5 hover:bg-amber-500/20 text-neutral-300 hover:text-amber-300 transition-colors cursor-pointer"
+                    title="Amanecer (06:00)"
+                  >
+                    <Sunrise className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setTimeHours(12.0);
+                      setIsPlaying(false);
+                    }}
+                    className="p-1.5 md:p-2 rounded-lg bg-white/5 hover:bg-yellow-500/20 text-neutral-300 hover:text-yellow-300 transition-colors cursor-pointer"
+                    title="Mediodía (12:00)"
+                  >
+                    <Sun className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setTimeHours(18.0);
+                      setIsPlaying(false);
+                    }}
+                    className="p-1.5 md:p-2 rounded-lg bg-white/5 hover:bg-orange-500/20 text-neutral-300 hover:text-orange-300 transition-colors cursor-pointer"
+                    title="Atardecer (18:00)"
+                  >
+                    <Sunset className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* Botón para colapsar / expandir el panel */}
               <button
-                onClick={() => {
-                  setTimeHours(6.0);
-                  setIsPlaying(false);
-                }}
-                className="p-2 rounded-lg bg-white/5 hover:bg-amber-500/20 text-neutral-300 hover:text-amber-300 transition-colors"
-                title="Amanecer (06:00)"
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className="p-1.5 sm:p-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-neutral-300 hover:text-white transition-all shadow cursor-pointer"
+                title={isCollapsed ? 'Expandir controles' : 'Colapsar panel'}
+                aria-label={isCollapsed ? 'Expandir controles' : 'Colapsar panel'}
               >
-                <Sunrise className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => {
-                  setTimeHours(12.0);
-                  setIsPlaying(false);
-                }}
-                className="p-2 rounded-lg bg-white/5 hover:bg-yellow-500/20 text-neutral-300 hover:text-yellow-300 transition-colors"
-                title="Mediodía (12:00)"
-              >
-                <Sun className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => {
-                  setTimeHours(18.0);
-                  setIsPlaying(false);
-                }}
-                className="p-2 rounded-lg bg-white/5 hover:bg-orange-500/20 text-neutral-300 hover:text-orange-300 transition-colors"
-                title="Atardecer (18:00)"
-              >
-                <Sunset className="w-4 h-4" />
+                {isCollapsed ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </button>
             </div>
           </div>
 
-          {/* Bottom Row: Sun Position Slider with Hour Ticks */}
-          <div className="flex flex-col gap-1.5 pt-1">
-            <div className="relative flex items-center">
-              <input
-                type="range"
-                min="6.0"
-                max="18.0"
-                step="0.02"
-                value={timeHours}
-                onChange={(e) => {
-                  setTimeHours(parseFloat(e.target.value));
-                  if (isPlaying) setIsPlaying(false);
-                }}
-                className="w-full h-2.5 bg-neutral-800 rounded-lg appearance-none cursor-pointer accent-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/40"
-                aria-label="Posición del sol por hora"
-              />
-            </div>
-
-            {/* Hour markers row */}
-            <div className="flex justify-between items-center text-[10px] md:text-xs font-mono text-neutral-400 px-1">
-              {[6, 8, 10, 12, 14, 16, 18].map((h) => (
-                <button
-                  key={h}
-                  onClick={() => {
-                    setTimeHours(h);
-                    setIsPlaying(false);
+          {/* Bottom Row: Sun Position Slider with Hour Ticks (Oculto al colapsar) */}
+          {!isCollapsed && (
+            <div className="flex flex-col gap-1.5 pt-1 animate-in fade-in duration-200">
+              <div className="relative flex items-center">
+                <input
+                  type="range"
+                  min="6.0"
+                  max="18.0"
+                  step="0.02"
+                  value={timeHours}
+                  onChange={(e) => {
+                    setTimeHours(parseFloat(e.target.value));
+                    if (isPlaying) setIsPlaying(false);
                   }}
-                  className={`hover:text-amber-300 transition-colors cursor-pointer ${
-                    Math.round(timeHours) === h ? 'text-amber-400 font-bold' : ''
-                  }`}
-                >
-                  {h}:00
-                </button>
-              ))}
+                  className="w-full h-2.5 bg-neutral-800 rounded-lg appearance-none cursor-pointer accent-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/40"
+                  aria-label="Posición del sol por hora"
+                />
+              </div>
+
+              {/* Hour markers row */}
+              <div className="flex justify-between items-center text-[10px] md:text-xs font-mono text-neutral-400 px-1">
+                {[6, 8, 10, 12, 14, 16, 18].map((h) => (
+                  <button
+                    key={h}
+                    onClick={() => {
+                      setTimeHours(h);
+                      setIsPlaying(false);
+                    }}
+                    className={`hover:text-amber-300 transition-colors cursor-pointer ${
+                      Math.round(timeHours) === h ? 'text-amber-400 font-bold' : ''
+                    }`}
+                  >
+                    {h}:00
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
